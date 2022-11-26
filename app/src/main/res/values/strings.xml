@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">clean_architecture</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_note">add_note</string>
+    <string name="first_note">Первая заметка</string>
+    <string name="note_desc">Описание к заметке</string>
+    <string name="date_created">23 ноября 2022</string>
+    <string name="title">Введите заголовок</string>
+    <string name="descc">Введите описание</string>
 </resources>
