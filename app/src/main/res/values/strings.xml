@@ -8,4 +8,5 @@
     <string name="date_created">23 ноября 2022</string>
     <string name="title">Введите заголовок</string>
     <string name="descc">Введите описание</string>
+    <string name="save">Сохранить</string>
 </resources>

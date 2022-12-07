@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/background_item_gradient.xml" value="0.186" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2033514492753623" />
         <entry key="app/src/main/res/layout/fragment_add_note.xml" value="0.2033514492753623" />
         <entry key="app/src/main/res/layout/fragment_note_list.xml" value="0.2033514492753623" />
         <entry key="app/src/main/res/layout/item_note.xml" value="0.2033514492753623" />

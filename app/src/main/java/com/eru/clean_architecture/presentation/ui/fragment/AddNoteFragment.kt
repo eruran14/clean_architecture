@@ -1,26 +1,31 @@
 package com.eru.clean_architecture.presentation.ui.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.eru.clean_architecture.R
 import com.eru.clean_architecture.databinding.FragmentAddNoteBinding
+import com.eru.clean_architecture.domain.model.Note
+import com.eru.clean_architecture.presentation.base.BaseFragment
+import kotlinx.coroutines.launch
 
-class AddNoteFragment : Fragment() {
+class AddNoteFragment : BaseFragment(R.layout.fragment_add_note) {
+    private val viewModel: AddNoteViewModel by viewModels()
+    private val binding by viewBinding(FragmentAddNoteBinding::bind)
 
-    private lateinit var binding: FragmentAddNoteBinding
+    override fun initialize() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentAddNoteBinding.inflate(layoutInflater, container, false)
-        return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun setUpRequests() {
+        viewModel.createNote(
+            Note(
+                title = binding.addTitle.text.toString(),
+                description = binding.etAddDesc.text.toString(),
+                createdAt = System.currentTimeMillis()
+            )
+        )
     }
 }

@@ -1,67 +1,79 @@
 package com.eru.clean_architecture.presentation.ui.fragment
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
+import com.eru.clean_architecture.R
 import com.eru.clean_architecture.databinding.FragmentNoteListBinding
 import com.eru.clean_architecture.domain.model.Note
-import com.eru.clean_architecture.presentation.UiState
+import com.eru.clean_architecture.presentation.base.BaseFragment
 import com.eru.clean_architecture.presentation.ui.fragment.adapters.NoteAdapter
-import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
 
-class NoteListFragment : Fragment() {
-    private lateinit var binding: FragmentNoteListBinding
+@AndroidEntryPoint
+class NoteListFragment : BaseFragment(R.layout.fragment_note_list) {
+    private val binding by viewBinding(FragmentNoteListBinding::bind)
     private var noteList = arrayListOf<Note>()
     private val viewModel: NoteListViewModel by viewModels()
-    private val adapter = NoteAdapter(noteList)
+    private val noteAdapter by lazy {
+        NoteAdapter(noteList)
+    }
 
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        viewModel.getAllNotes()
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.getAllNotesState.collect{ state ->
-                    when (state){
-                        is UiState.Loading -> {
-                            //TODO show progress bar
-                        }
-                        is UiState.Error -> {
-                            Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
-                        }
-                        is UiState.Success -> {
-                            noteList.addAll(state.data)
-                            adapter.notifyDataSetChanged()
-                        }
-                        is UiState.Empty -> {}
-                    }
-                }
-            }
+    override fun initialize() {
+        binding.recyclerView.apply {
+            layoutManager =
+                LinearLayoutManager(
+                    requireContext(),
+                    LinearLayoutManager.VERTICAL,
+                    false
+                )
+            adapter = noteAdapter
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentNoteListBinding.inflate(layoutInflater, container, false)
-        return binding.root
+    override fun setUpRequests() {
+        viewModel.getAllNotes()
+
+//        adapter = NoteAdapter(noteList) { title, desc ->
+//            val alertDialog = AlertDialog.Builder(requireContext())
+//            alertDialog.setMessage("Хотите изменить заметку?")
+//            alertDialog.setPositiveButton("Да") { _, _ ->
+//                findNavController().navigate(R.id.addNoteFragment, Bundle().apply {
+//                    putString(KEY_FOR_TITLE, title)
+//                    putString(KEY_FOR_DESC, desc)
+//                })
+//            }
+//        }
+
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    @SuppressLint("NotifyDataSetChanged")
+    override fun setUpObservers() {
+        viewModel.getAllNotesState.collectState(
+            onLoading = {
+                binding.progressBar.isVisible = true
+            },
+            onError = { message ->
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            },
+            onSuccess = { data ->
+                noteList.addAll(data)
+                noteAdapter.notifyDataSetChanged()
+            }
+        )
 
-        binding.recyclerView.adapter = adapter
+    }
+
+    companion object {
+        const val KEY_FOR_TITLE = "title"
+        const val KEY_FOR_DESC = "description"
     }
 
 }

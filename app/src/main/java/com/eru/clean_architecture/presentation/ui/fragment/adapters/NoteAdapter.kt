@@ -10,15 +10,17 @@ import com.eru.clean_architecture.domain.model.Note
 import java.util.*
 import kotlin.collections.ArrayList
 
-class NoteAdapter(private var noteList: ArrayList<Note>): RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
+class NoteAdapter(private var noteList: ArrayList<Note>,
+): RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
 
     inner class ViewHolder(private val binding: ItemNoteBinding): RecyclerView.ViewHolder(binding.root){
 
-        fun bind(position: Int) {
-            binding.tvTitle.text = noteList[position].title
-            binding.tvDesc.text = noteList[position].description
-            binding.tvDateCreated.text = getDate(noteList[position].createdAt, "dd-MMMM hh:mm ")
+        fun bind(note: Note) {
+            binding.tvTitle.text = note.title
+            binding.tvDesc.text = note.description
+            binding.tvDateCreated.text = getDate(note.createdAt, "dd-MMMM hh:mm ")
+
         }
 
         private fun getDate(milliSeconds: Long, dateFormat: String): String? {
@@ -27,7 +29,6 @@ class NoteAdapter(private var noteList: ArrayList<Note>): RecyclerView.Adapter<N
             calendar.timeInMillis = milliSeconds
             return formatter.format(calendar.time)
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -35,7 +36,7 @@ class NoteAdapter(private var noteList: ArrayList<Note>): RecyclerView.Adapter<N
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(position)
+        holder.bind(noteList[position])
     }
 
     override fun getItemCount(): Int {
