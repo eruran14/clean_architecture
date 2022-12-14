@@ -1,17 +1,20 @@
+
+import org.gradle.internal.impldep.com.amazonaws.PredefinedClientConfigurations.defaultConfig
+
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
-    id 'com.google.dagger.hilt.android'
+    id ("com.android.application")
+    id ("org.jetbrains.kotlin.android")
+    id ("kotlin-kapt")
+    id ("com.google.dagger.hilt.android")
 }
 
 android {
-    compileSdk 32
+    compileSdk = AndroidConfig.compileSdk
 
     defaultConfig {
         applicationId = "com.eru.clean_architecture"
-        minSdk = 28
-        targetSdk = 32
+        minSdk = AndroidConfig.minSdk
+        targetSdk = AndroidConfig.targetSdk
         versionCode = 1
         versionName = "1.0"
 
@@ -41,39 +44,36 @@ android {
 
 dependencies {
 
-    implementation ("androidx.core:core-ktx:1.7.0")
-    implementation ("androidx.appcompat:appcompat:1.5.1")
-    implementation ("com.google.android.material:material:1.7.0")
-    implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
-    testImplementation ("junit:junit:4.13.2")
-    androidTestImplementation ("androidx.test.ext:junit:1.1.4")
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.0")
-    implementation ("androidx.fragment:fragment-ktx:1.5.4")
+    implementation (Dependencies.UI.androidCore)
+    implementation (Dependencies.UI.androidAppCompat)
+    implementation (Dependencies.UI.androidMaterial)
+    implementation (Dependencies.UI.constraintLayout)
+    testImplementation (Dependencies.UI.jUnit)
+    androidTestImplementation (Dependencies.UI.androidJUnit)
+    androidTestImplementation (Dependencies.UI.espresso)
+    implementation (Dependencies.UI.androidFragment)
 
-    implementation ("androidx.room:room-runtime:2.4.3")
-    implementation ("androidx.room:room-ktx:2.4.3")
-    kapt ("androidx.room:room-compiler:2.4.3")
+    implementation (Dependencies.Room.runtime)
+    implementation (Dependencies.Room.room)
+    kapt (Dependencies.Room.compiler)
 
     //Dagger Hilt
-    implementation ("com.google.dagger:hilt-android:2.44.2")
-    kapt ("com.google.dagger:hilt-compiler:2.44.2")
+    implementation (Dependencies.DaggerHilt.daggerHilt)
+    kapt (Dependencies.DaggerHilt.daggerHilt)
 
     //Coroutines
-    def coroutine_version = "1.6.4"
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version")
+    implementation(Dependencies.Coroutines.coroutines)
+    implementation(Dependencies.Coroutines.core)
 
     //Navigation
-    def nav_version = "2.5.3"
-    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
-    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    implementation(Dependencies.NavComponent.fragment)
+    implementation(Dependencies.NavComponent.ui)
 
     //Lifecycle
-    def lifecycle_version = '2.5.1'
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
-    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
+    implementation (Dependencies.LifeCycle.viewModel)
+    implementation (Dependencies.LifeCycle.runTime)
 
     //ViewBindingDelegate
-    implementation ("com.github.kirich1409:viewbindingpropertydelegate-noreflection:1.5.6")
+    implementation (Dependencies.ViewBindingDelegate.viewBindingDelegate)
 
 }
