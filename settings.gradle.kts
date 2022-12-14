@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "clean_architecture"
-include ':app'
+include(":app")
